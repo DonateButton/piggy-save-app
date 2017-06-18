@@ -20,6 +20,7 @@ import { connect, Provider } from 'react-redux'
 import logger from 'redux-logger'
 
 import { accounts } from './accounts/accounts.reducer';
+import { selectedAccount } from './accounts/selectedAccount.reducer';
 import _ from 'lodash';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -28,7 +29,7 @@ injectTapEventPlugin();
 
 const log = console.log;
 
-const store = createStore(combineReducers({accounts}), applyMiddleware(logger));
+const store = createStore(combineReducers({accounts, selectedAccount}), applyMiddleware(logger));
 const mapStateToProps = state =>
 {
   return {
@@ -40,8 +41,7 @@ const mapDispatchToProps = dispatch =>
   console.log("mapDispatchToProps:", dispatch);
   return {
     onAccountClick: (id) => {
-      // dispatch({type: 'ADD_ACCOUNT'});
-      log("Yo, id:", id);
+      dispatch({type: 'SELECT_ACCOUNT', accountID: id});
     }
   }
 };
