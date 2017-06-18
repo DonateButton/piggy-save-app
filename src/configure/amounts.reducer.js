@@ -33,10 +33,10 @@ export const removeAmount = (state, action)=>
 };
 
 const defaultAmounts = [
-    {id: guid(), amount: 1, amountDisplay: "$1.00"},
-    {id: guid(), amount: 5, amountDisplay: "$5.00"},
-    {id: guid(), amount: 15, amountDisplay: "$15.00"},
-    {id: guid(), amount: 0, amountDisplay: "Other Amount"}
+    {id: guid(), total: 1, amountDisplay: "$1.00"},
+    {id: guid(), total: 5, amountDisplay: "$5.00"},
+    {id: guid(), total: 15, amountDisplay: "$15.00"},
+    {id: guid(), total: 0, amountDisplay: "Other Amount"}
 ];
 
 export const amounts = (state=defaultAmounts, action)=>

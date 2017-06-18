@@ -1,39 +1,42 @@
 import React from 'react';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import {GridList, GridTile} from 'material-ui/GridList';
 import { connect } from 'react-redux'
 
 const log = console.log;
 
 const styles = {
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
+  block: {
+    maxWidth: 250,
   },
-  gridList: {
-    width: 375,
-    height: 375,
-    titleBackground: 'rgba(1, 1, 1, 1)'
+  radioButton: {
+    marginBottom: 16,
   },
 };
 
-export const ChooseAmountView = ({amounts, onAmountClick}) => (
+const amountsToButtons = (ammounts, onAmountClick) =>
+{
+    return <RadioButtonGroup name="amountChosen" defaultSelected={1}
+    onChange={(event, value)=> onAmountClick(value)}>
+        {ammounts.map(amount =>
+        (<RadioButton
+            key={amount.id}
+            value={amount.total}
+            label={amount.amountDisplay}
+            style={styles.radioButton}
+        />))}
+    </RadioButtonGroup>
+};
+
+export const ChooseAmountView = ({amounts, onAmountClick, onSaveAmountChosen}) => (
   <div>
       <p>Each time the Change Button is pressed, the amount you select below will transfer into your savings account from your checking account.</p>
       <div style={styles.root}>
-        <GridList
-        cellHeight={72}
-        style={styles.gridList}
-        >
-        {amounts.map( amount => (
-            <GridTile
-            key={amount.id}
-            title={amount.amountDisplay}
-            onClick={() => onAmountClick(amount.id)}>
-            </GridTile>
-        ))}
-        </GridList>
+       {amountsToButtons(amounts, onAmountClick)}
+       <RaisedButton 
+            label="Save" 
+            fullWidth={true}
+            onClick={()=> onSaveAmountChosen()} />
     </div>
   </div>
 )
@@ -47,9 +50,13 @@ const mapStateToProps = state =>
 const mapDispatchToProps = dispatch =>
 {
   return {
-    onAmountClick: (id) => {
+    onAmountClick: value => {
       // dispatch({type: 'SELECT_ACCOUNT', accountID: id});
-      log("sup:", id);
+      log("onAmountClick, value:", value);
+    },
+    onSaveAmountChosen: ()=>
+    {
+        log("onSaveAmountChosen");
     }
   }
 };
