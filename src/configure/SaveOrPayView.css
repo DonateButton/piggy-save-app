@@ -1,0 +1,11 @@
+
+.col {
+  display: flex; /* or inline-flex */
+  flex-direction: column;
+  
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}

@@ -1,5 +1,4 @@
 import React from 'react';
-// import AccountItem from './AccountItem';
 import {List, ListItem} from 'material-ui/List';
 
 const accountsToList = (accounts, onAccountClick) =>

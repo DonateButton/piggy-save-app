@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import RaisedButton from 'material-ui/RaisedButton';
 import AppBar from 'material-ui/AppBar';
 
 import {
@@ -14,6 +13,10 @@ import {
 import LoadingScreen from './LoadingScreen';
 import AccountList from './accounts/AccountList';
 import NotFoundScreen from './NotFoundScreen';
+import SaveOrPayView from './configure/SaveOrPayView';
+import './configure/SaveOrPayView.css';
+import {SaveMoneyViewRedux} from './configure/SaveMoneyView';
+import {ChooseAmountViewRedux} from './configure/ChooseAmountView';
 
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { connect, Provider } from 'react-redux'
@@ -21,6 +24,7 @@ import logger from 'redux-logger'
 
 import { accounts } from './accounts/accounts.reducer';
 import { selectedAccount } from './accounts/selectedAccount.reducer';
+import { amounts } from './configure/amounts.reducer';
 import _ from 'lodash';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -29,7 +33,7 @@ injectTapEventPlugin();
 
 const log = console.log;
 
-const store = createStore(combineReducers({accounts, selectedAccount}), applyMiddleware(logger));
+const store = createStore(combineReducers({accounts, selectedAccount, amounts}), applyMiddleware(logger));
 const mapStateToProps = state =>
 {
   return {
@@ -127,16 +131,17 @@ const BasicExample = () => (
           <AppBar
               title="Title"
             />
-        <ul>
+        {/*<ul>
           <li><Link to="/">Loading Screen</Link></li>
           <li><Link to="/accounts">Accounts</Link></li>
           <li><Link to="/notfound">Not Found</Link></li>
-        </ul>
-
-        <hr/>
+        </ul>*/}
 
         <Route exact path="/" component={LoadingScreen}/>
         <Route path="/accounts" component={VisibleAccounts}/>
+        <Route path="/configure/1" component={SaveOrPayView}/>
+        <Route path="/configure/2" component={SaveMoneyViewRedux}/>
+        <Route path="/configure/3" component={ChooseAmountViewRedux}/>
         <Route path="/notfound" component={NotFoundScreen}/>
       </div>
     </MuiThemeProvider>
