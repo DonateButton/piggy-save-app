@@ -50,13 +50,12 @@ const mapStateToProps = state =>
 const mapDispatchToProps = dispatch =>
 {
   return {
-    onAmountClick: value => {
-      // dispatch({type: 'SELECT_ACCOUNT', accountID: id});
-      log("onAmountClick, value:", value);
+    onAmountClick: amount => {
+      dispatch({type: 'SELECTED_AMOUNT', amount});
     },
     onSaveAmountChosen: ()=>
     {
-        log("onSaveAmountChosen");
+        dispatch({type: 'CHOOSE_AMOUNT'});
     }
   }
 };

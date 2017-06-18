@@ -25,6 +25,7 @@ import logger from 'redux-logger'
 import { accounts } from './accounts/accounts.reducer';
 import { selectedAccount } from './accounts/selectedAccount.reducer';
 import { amounts } from './configure/amounts.reducer';
+import { chosenAmounts } from './configure/chosenAmounts.reducer';
 import _ from 'lodash';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -33,7 +34,12 @@ injectTapEventPlugin();
 
 const log = console.log;
 
-const store = createStore(combineReducers({accounts, selectedAccount, amounts}), applyMiddleware(logger));
+const store = createStore(combineReducers({
+  accounts, 
+  selectedAccount, 
+  amounts,
+  chosenAmounts
+}), applyMiddleware(logger));
 const mapStateToProps = state =>
 {
   return {
