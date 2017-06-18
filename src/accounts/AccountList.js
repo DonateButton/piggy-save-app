@@ -1,20 +1,26 @@
 import React from 'react';
 // import AccountItem from './AccountItem';
+import {List, ListItem} from 'material-ui/List';
 
 const accountsToList = (accounts, onAccountClick) =>
 {
-  console.log("accounts:", accounts);
-  console.log("onAccountClick:", onAccountClick);
+  console.log("accountsToList::accounts:", accounts);
+  console.log("accountsToList::onAccountClick:", onAccountClick);
   return accounts.map(account =>
   {
     const accountName = account.name;
-    return <div key={account.id} onClick={() => onAccountClick(account.id)}>{accountName}</div>;
+    return <ListItem key={account.id} 
+      onClick={() => onAccountClick(account.id)}
+      primaryText={accountName} />;
   });
 };
 const AccountList = ({accounts, onAccountClick}) => (
-  <ul>
+  <div>
+  <h1>Accounts:</h1>
+  <List>
     {accountsToList(accounts, onAccountClick)}
-    </ul>
+    </List>
+  </div>
 )
 
 export default AccountList;

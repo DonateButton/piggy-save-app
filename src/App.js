@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
+import AppBar from 'material-ui/AppBar';
 
 import {
   BrowserRouter as Router,
@@ -14,29 +15,24 @@ import LoadingScreen from './LoadingScreen';
 import AccountList from './accounts/AccountList';
 import NotFoundScreen from './NotFoundScreen';
 
-import { createStore } from 'redux'
+import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { connect, Provider } from 'react-redux'
+import logger from 'redux-logger'
 
-function accounts(state=[{id: 1, name: 'Hey'}], action)
-{
-  console.log("action:", action);
-  switch(action.type)
-  {
-    case 'ADD_ACCOUNT':
-      const newAccount = {id: 2, name: 'Thing'}; 
-      const newList = [...state, newAccount];
-      console.log("newList:", newList);
-      return newList;
-    default:
-      return state;
-  }
-}
+import { accounts } from './accounts/accounts.reducer';
+import _ from 'lodash';
 
-const store = createStore(accounts);
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
+injectTapEventPlugin();
+
+const log = console.log;
+
+const store = createStore(combineReducers({accounts}), applyMiddleware(logger));
 const mapStateToProps = state =>
 {
   return {
-    accounts: state
+    accounts: state.accounts
   };
 };
 const mapDispatchToProps = dispatch =>
@@ -44,10 +40,35 @@ const mapDispatchToProps = dispatch =>
   console.log("mapDispatchToProps:", dispatch);
   return {
     onAccountClick: (id) => {
-      dispatch({type: 'ADD_ACCOUNT'});
+      // dispatch({type: 'ADD_ACCOUNT'});
+      log("Yo, id:", id);
     }
   }
 };
+
+const fetchAccounts = ()=>
+{
+  const myHeaders = new Headers();
+  myHeaders.append('Content-Type', 'application/json');
+  // myHeaders.append('Access-Control-Allow-Origin', 'localhost');
+  return fetch(new Request('https://gzv95i4ix3.execute-api.us-east-1.amazonaws.com/prod/api/account/list'), {headers: myHeaders})
+  .then(response =>
+  {
+    return response.json();
+  })
+  .catch(error =>
+  {
+    log("fetchAccounts error:", error);
+  });
+};
+
+const loadAccounts = async ()=>
+{
+  const accountsResponse = await fetchAccounts();
+  const accounts = _.get(accountsResponse, 'data');
+  return store.dispatch({type: 'ADD_ACCOUNTS', accounts});
+};
+
 const VisibleAccounts = connect(
   mapStateToProps,
   mapDispatchToProps
@@ -101,19 +122,24 @@ const Topics = ({ match }) => (
 
 const BasicExample = () => (
   <Router>
-    <div>
-      <ul>
-        <li><Link to="/">Loading Screen</Link></li>
-        <li><Link to="/accounts">Accounts</Link></li>
-        <li><Link to="/notfound">Not Found</Link></li>
-      </ul>
+    <MuiThemeProvider>
+      <div>
+          <AppBar
+              title="Title"
+            />
+        <ul>
+          <li><Link to="/">Loading Screen</Link></li>
+          <li><Link to="/accounts">Accounts</Link></li>
+          <li><Link to="/notfound">Not Found</Link></li>
+        </ul>
 
-      <hr/>
+        <hr/>
 
-      <Route exact path="/" component={LoadingScreen}/>
-      <Route path="/accounts" component={VisibleAccounts}/>
-      <Route path="/notfound" component={NotFoundScreen}/>
-    </div>
+        <Route exact path="/" component={LoadingScreen}/>
+        <Route path="/accounts" component={VisibleAccounts}/>
+        <Route path="/notfound" component={NotFoundScreen}/>
+      </div>
+    </MuiThemeProvider>
   </Router>
 )
 
@@ -126,5 +152,7 @@ class App extends Component {
     );
   }
 }
+
+loadAccounts();
 
 export default App;
