@@ -11,7 +11,7 @@ import {
 } from 'react-router-dom'
 
 import LoadingScreen from './LoadingScreen';
-import AccountList from './accounts/AccountList';
+
 import NotFoundScreen from './NotFoundScreen';
 import SaveOrPayView from './configure/SaveOrPayView';
 import './configure/SaveOrPayView.css';
@@ -28,6 +28,8 @@ import { amounts } from './configure/amounts.reducer';
 import { chosenAmounts } from './configure/chosenAmounts.reducer';
 import _ from 'lodash';
 
+import {VisibleAccounts } from './accounts/VisibleAccounts';
+
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
 injectTapEventPlugin();
@@ -40,49 +42,7 @@ const store = createStore(combineReducers({
   amounts,
   chosenAmounts
 }), applyMiddleware(logger));
-const mapStateToProps = state =>
-{
-  return {
-    accounts: state.accounts
-  };
-};
-const mapDispatchToProps = dispatch =>
-{
-  console.log("mapDispatchToProps:", dispatch);
-  return {
-    onAccountClick: (id) => {
-      dispatch({type: 'SELECT_ACCOUNT', accountID: id});
-    }
-  }
-};
 
-const fetchAccounts = ()=>
-{
-  const myHeaders = new Headers();
-  myHeaders.append('Content-Type', 'application/json');
-  // myHeaders.append('Access-Control-Allow-Origin', 'localhost');
-  return fetch(new Request('https://gzv95i4ix3.execute-api.us-east-1.amazonaws.com/prod/api/account/list'), {headers: myHeaders})
-  .then(response =>
-  {
-    return response.json();
-  })
-  .catch(error =>
-  {
-    log("fetchAccounts error:", error);
-  });
-};
-
-const loadAccounts = async ()=>
-{
-  const accountsResponse = await fetchAccounts();
-  const accounts = _.get(accountsResponse, 'data');
-  return store.dispatch({type: 'ADD_ACCOUNTS', accounts});
-};
-
-const VisibleAccounts = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AccountList)
 
 const Home = () => (
   <div>
@@ -163,7 +123,5 @@ class App extends Component {
     );
   }
 }
-
-loadAccounts();
 
 export default App;
