@@ -8,13 +8,14 @@ import {
     ACCOUNTS_LOAD_FAILURE,
     ADD_ACCOUNTS
 } from './accounts.reducer';
+import CircularProgress from 'material-ui/CircularProgress';
 
 const log = console.log;
 
 const mapStateToProps = state => {
     // console.log("VisibleAccounts::mapStateToProps, state:", state.accounts);
     return {
-        accounts: state.accounts.accounts
+        accounts: _.get(state, 'accounts')
     };
 };
 const mapDispatchToProps = dispatch => {
@@ -52,10 +53,24 @@ const loadAccounts = async (loading, success, failure, addAccounts) => {
     }
 };
 
+const accountsLoading = props => _.get(props, 'accounts.loading');
+const getAccountListOrLoading = props =>
+{
+    if(accountsLoading(props) === false)
+    {
+        const accounts = _.get(props, 'accounts.accounts');
+        return <AccountList accounts={accounts} onAccountClick={()=> log('yo')}></AccountList>;
+    }
+    else
+    {
+        return <CircularProgress />;
+    }
+};
+
 export class AccountsView extends React.Component {
     render() {
         return <div>
-            <AccountList accounts={this.props.accounts} onAccountClick={()=> log('yo')}></AccountList>
+            {getAccountListOrLoading(this.props)}
         </div>
     }
 

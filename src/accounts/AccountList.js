@@ -3,8 +3,8 @@ import {List, ListItem} from 'material-ui/List';
 
 const accountsToList = (accounts, onAccountClick) =>
 {
-  console.log("accountsToList::accounts:", accounts);
-  console.log("accountsToList::onAccountClick:", onAccountClick);
+  // console.log("accountsToList::accounts:", accounts);
+  // console.log("accountsToList::onAccountClick:", onAccountClick);
   return accounts.map(account =>
   {
     const accountName = account.name;

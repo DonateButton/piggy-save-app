@@ -6,39 +6,51 @@ describe('#accounts reducer', ()=>
     {
         it('adds an account', ()=>
         {
-            expect(addAccount([], {account: 'a'})).toContain('a');
+            const state = addAccount({accounts: []}, {account: 'a'});
+            const accounts = state.accounts;
+            expect(accounts).toContain('a');
         });
         it('adds an account', ()=>
         {
-            expect(addAccount([], {account: {id: 1, name: 'cow'}})).toContainEqual({id: 1, name: 'cow'});
+            const state = addAccount({accounts: []}, {account: {id: 1, name: 'cow'}});
+            const accounts = state.accounts;
+            expect(accounts).toContainEqual({id: 1, name: 'cow'});
         });
     });
     describe("#accounts", ()=>
     {
         it('deals with whack events', ()=>
         {
-            expect(accounts([], 'moo')).toHaveLength(0);
+            const state = accounts({accounts: []}, 'moo');
+            const accountsList = state.accounts;
+            expect(accountsList).toHaveLength(0);
         });
         it('adds an account with that action', ()=>
         {
-            expect(accounts([], {type: 'ADD_ACCOUNT', account: 'a'})).toHaveLength(1);
+            const state = accounts({accounts: []}, {type: 'ADD_ACCOUNT', account: 'a'});
+            const accountsList = state.accounts;
+            expect(accountsList).toHaveLength(1);
         });
     });
     describe("#removeAccount", ()=>
     {
         it('removes account you find', ()=>
         {
-            expect(removeAccount([
+            const state = removeAccount({accounts: [
                 {id: 1, name: 'cow'},
                 {id: 2, name: 'moo'}
-            ], {account: {id: 1, name: 'cow'}})).toHaveLength(1);
+            ]}, {account: {id: 1, name: 'cow'}});
+            const accounts = state.accounts;
+            expect(accounts).toHaveLength(1);
         });
         it('changes nothing if no account', ()=>
         {
-            expect(removeAccount([
+            const state = removeAccount({accounts: [
                 {id: 1, name: 'cow'},
                 {id: 2, name: 'moo'}
-            ], {account: {id: 3, name: 'wat'}})).toHaveLength(2);
+            ]}, {account: {id: 3, name: 'wat'}});
+            const accounts = state.accounts;
+            expect(accounts).toHaveLength(2);
         });
     });
 });

@@ -38,15 +38,14 @@ export const accountsLoadFailure = (state, action)=>
 
 export const addAccount = (state, action)=>
 {
-    return Object.assign({}, state, {
-        accounts: [...state, action.account]
-    });
+    const accounts = [...state.accounts, action.account];
+    return Object.assign({}, state, {accounts});
 };
 
 export const addAccounts = (state, action)=>
 {
     return Object.assign({}, state, {
-        accounts: [...state, ...action.accounts]
+        accounts: [...state.accounts, ...action.accounts]
     });
 };
 
@@ -62,10 +61,11 @@ export const removeAccount = (state, action)=>
     {
         return state;
     }
+    const accounts = _.get(state, 'accounts');
     return Object.assign({}, state, {
         accounts: [
-            ...state.slice(0, index), 
-            ...state.slice(index + 1)
+            ...accounts.slice(0, index), 
+            ...accounts.slice(index + 1)
         ]
     });
 };
