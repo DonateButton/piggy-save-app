@@ -17,6 +17,7 @@ import SaveOrPayView from './configure/SaveOrPayView';
 import './configure/SaveOrPayView.css';
 import {SaveMoneyViewRedux} from './configure/SaveMoneyView';
 import {ChooseAmountViewRedux} from './configure/ChooseAmountView';
+import LoginView from './login/LoginView';
 
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { connect, Provider } from 'react-redux'
@@ -26,6 +27,7 @@ import { accounts } from './accounts/accounts.reducer';
 import { selectedAccount } from './accounts/selectedAccount.reducer';
 import { amounts } from './configure/amounts.reducer';
 import { chosenAmounts } from './configure/chosenAmounts.reducer';
+import { login } from './login/login.reducer';
 import _ from 'lodash';
 
 import {VisibleAccounts } from './accounts/VisibleAccounts';
@@ -40,7 +42,8 @@ const store = createStore(combineReducers({
   accounts, 
   selectedAccount, 
   amounts,
-  chosenAmounts
+  chosenAmounts,
+  login
 }), applyMiddleware(logger));
 
 
@@ -97,13 +100,8 @@ const BasicExample = () => (
           <AppBar
               title="Title"
             />
-        {/*<ul>
-          <li><Link to="/">Loading Screen</Link></li>
-          <li><Link to="/accounts">Accounts</Link></li>
-          <li><Link to="/notfound">Not Found</Link></li>
-        </ul>*/}
 
-        <Route exact path="/" component={LoadingScreen}/>
+        <Route path="/login" component={LoginView}/>
         <Route path="/accounts" component={VisibleAccounts}/>
         <Route path="/configure/1" component={SaveOrPayView}/>
         <Route path="/configure/2" component={SaveMoneyViewRedux}/>
